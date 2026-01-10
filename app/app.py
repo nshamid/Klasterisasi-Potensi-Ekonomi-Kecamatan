@@ -123,6 +123,17 @@ if menu == "🏠 Beranda & Dataset":
     st.write("### 📄 Dataset Utama")
     st.dataframe(df_raw[['Kecamatan'] + fitur_ekonomi], use_container_width=True)
 
+    # Bagian 4: Akses Project
+    st.write("---")
+    st.write("### 🔗 Akses Project & Dokumentasi")
+    
+    col_link1, col_link2 = st.columns(2)
+    with col_link1:
+        st.markdown("[📁 Repository GitHub Project](https://github.com/nshamid/Klasterisasi-Potensi-Ekonomi-Kecamatan/tree/main)")
+    
+    with col_link2:
+        st.markdown("[📓 Notebook Google Colab](https://colab.research.google.com/drive/1UgG0mtfn3TkSO6zTTJIJ7U2AK2CwWvdU?usp=sharing)")
+
 # --- 6. HALAMAN 2: ANALISIS KLASTERISASI ---
 elif menu == "📊 Analisis Klasterisasi":
     st.title("📊 Hasil Analisis Klasterisasi")
