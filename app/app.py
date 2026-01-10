@@ -20,8 +20,8 @@ fitur_ekonomi = [
 def load_essentials():
     # Sesuaikan path jika folder Anda berbeda
     df = pd.read_csv("Dataset/Dataset Potensi Ekonomi Kecamatan di Kota Palembang 2025.csv")
-    model = joblib.load('Model/model_kmeans_palembang.pkl')
-    scaler = joblib.load('Model/scaler_palembang.pkl')
+    model = joblib.load('Model/model_kmeans_potensiekonomi.pkl')
+    scaler = joblib.load('Model/scaler_potensiekonomi.pkl')
     return df, model, scaler
 
 try:
