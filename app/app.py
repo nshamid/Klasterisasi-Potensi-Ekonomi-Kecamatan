@@ -2,153 +2,125 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import plotly.graph_objects as go
 import joblib
 from sklearn.decomposition import PCA
 
-# --- CONFIGURASI HALAMAN ---
-st.set_page_config(page_title="Dashboard Ekonomi Palembang", layout="wide")
+# --- 1. KONFIGURASI HALAMAN ---
+st.set_page_config(page_title="Ekonomi Palembang 2025", layout="wide")
 
-# --- LOAD DATA & MODEL ---
-@st.cache_resource
-def load_essentials():
-    df = pd.read_csv("Dataset/Dataset Potensi Ekonomi Kecamatan di Kota Palembang 2025.csv")
-    model = joblib.load('Model/model_kmeans_potensiekonomi.pkl')
-    scaler = joblib.load('Model/scaler_potensiekonomi.pkl')
-    return df, model, scaler
-
-try:
-    df_raw, kmeans, scaler = load_essentials()
-except Exception as e:
-    st.error(f"Gagal memuat file. Pastikan file .csv dan .pkl ada di repository. Error: {e}")
-    st.stop()
-
-# --- PREPROCESSING UNTUK DASHBOARD ---
-# Daftar kolom yang digunakan saat training (pastikan urutan dan nama persis sama)
+# Daftar kolom fitur yang digunakan saat training (Urutan harus SAMA persis)
 fitur_ekonomi = [
     'Jumlah Penduduk', 'Kepadatan Penduduk', 'Sarana Pendidikan', 
     'Sarana Kesehatan', 'Transportasi', 'Sarana Perdagangan dan Jasa', 
     'Keberadaan Pasar dan Pertokoan', 'Bank dan Koperasi', 'IKM dan Sentra'
 ]
 
-# Pastikan hanya mengambil kolom-kolom di atas
-X = df_raw[fitur_ekonomi] 
+# --- 2. LOAD DATA & MODEL ---
+@st.cache_resource
+def load_essentials():
+    # Sesuaikan path jika folder Anda berbeda
+    df = pd.read_csv("Dataset/Dataset Potensi Ekonomi Kecamatan di Kota Palembang 2025.csv")
+    model = joblib.load('Model/model_kmeans_palembang.pkl')
+    scaler = joblib.load('Model/scaler_palembang.pkl')
+    return df, model, scaler
 
-# Sekarang jalankan transform
+try:
+    df_raw, kmeans, scaler = load_essentials()
+except Exception as e:
+    st.error(f"Gagal memuat file. Pastikan folder 'data' dan 'models' sudah benar. Error: {e}")
+    st.stop()
+
+# --- 3. PREPROCESSING & LABELLING ---
+# Pastikan hanya mengambil kolom numerik yang diperlukan untuk transform
+X = df_raw[fitur_ekonomi]
 X_scaled = scaler.transform(X)
+
+# Prediksi Cluster
 df_raw['Cluster'] = kmeans.predict(X_scaled)
 
-# Mapping Label (Sesuaikan dengan hasil analisis Anda di Colab)
-# Di sini saya asumsikan urutan berdasarkan rata-rata fitur ekonomi
-profiling = df_raw.drop(columns='Kecamatan').groupby('Cluster').mean().sum(axis=1).sort_values()
-mapping = {profiling.index[0]: 'Potensi Rendah', 
-           profiling.index[1]: 'Potensi Menengah', 
-           profiling.index[2]: 'Potensi Tinggi'}
+# Penentuan Label Otomatis agar tidak tertukar (Rendah -> Tinggi)
+# Menggunakan numeric_only=True untuk menghindari TypeError
+cluster_profile = df_raw.groupby('Cluster')[fitur_ekonomi].mean()
+ranking = cluster_profile.sum(axis=1).sort_values().index
+
+mapping = {
+    ranking[0]: 'Potensi Rendah',
+    ranking[1]: 'Potensi Menengah',
+    ranking[2]: 'Potensi Tinggi'
+}
 df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
 
-# --- SIDEBAR ---
+# --- 4. SIDEBAR NAVIGATION ---
 st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/b/b3/Logo_BPS.png", width=100)
-st.sidebar.title("Navigasi")
-menu = st.sidebar.radio("Pilih Halaman:", ["🏠 Beranda & Data", "📊 Analisis Klaster", "💡 Simulasi Prediksi"])
+st.sidebar.title("Menu Utama")
+menu = st.sidebar.selectbox("Pilih Halaman:", ["🏠 Dashboard", "📊 Analisis Klaster", "💡 Simulasi"])
 
-st.sidebar.info("Project Magang BPS Kota Palembang 2025")
-
-# --- HALAMAN 1: BERANDA ---
-if menu == "🏠 Beranda & Data":
-    st.title("🏙️ Analisis Klaster Potensi Ekonomi Kecamatan")
-    st.subheader("Kota Palembang Tahun 2025")
-    
-    st.write("""
-    Dashboard ini digunakan untuk mengelompokkan kecamatan di Kota Palembang berdasarkan 
-    9 indikator ekonomi utama menggunakan algoritma **K-Means Clustering**.
-    """)
+# --- 5. HALAMAN 1: DASHBOARD ---
+if menu == "🏠 Dashboard":
+    st.title("🏙️ Potensi Ekonomi Kecamatan Kota Palembang")
+    st.markdown("Analisis Klastering menggunakan Metode **K-Means** untuk perencanaan ekonomi 2025.")
     
     col1, col2, col3 = st.columns(3)
-    col1.metric("Total Kecamatan", len(df_raw))
-    col2.metric("Jumlah Klaster", "3 Kategori")
-    col3.metric("Sumber Data", "BPS Palembang")
+    col1.metric("Total Wilayah", f"{len(df_raw)} Kecamatan")
+    col2.metric("Optimal Klaster", "3 Kelompok")
+    col3.metric("Metode", "K-Means + PCA")
 
-    st.divider()
-    st.write("### Dataset Potensi Ekonomi")
+    st.write("### Dataset Utama")
     st.dataframe(df_raw, use_container_width=True)
 
-# --- HALAMAN 2: ANALISIS KLASTER ---
+# --- 6. HALAMAN 2: ANALISIS KLASTER ---
 elif menu == "📊 Analisis Klaster":
-    st.title("📊 Hasil Analisis Klastering")
+    st.title("📊 Hasil Klasterisasi")
     
-    tab1, tab2 = st.tabs(["📈 Visualisasi Sebaran (PCA)", "📋 Profiling Kategori"])
+    tab1, tab2 = st.tabs(["📍 Visualisasi PCA", "📈 Profiling Indikator"])
     
     with tab1:
-        st.write("### Peta Sebaran Dimensi Ekonomi (PCA)")
-        # Reduksi dimensi untuk visualisasi
+        st.write("### Sebaran Kecamatan (Reduksi PCA 2D)")
         pca = PCA(n_components=2)
-        components = pca.fit_transform(X_scaled)
-        df_pca = pd.DataFrame(data=components, columns=['PC1', 'PC2'])
+        pca_res = pca.fit_transform(X_scaled)
+        df_pca = pd.DataFrame(pca_res, columns=['PC1', 'PC2'])
         df_pca['Kecamatan'] = df_raw['Kecamatan']
         df_pca['Kategori'] = df_raw['Kategori']
 
-        fig_pca = px.scatter(
+        fig = px.scatter(
             df_pca, x='PC1', y='PC2', color='Kategori',
             hover_name='Kecamatan', text='Kecamatan',
-            color_discrete_map={'Potensi Tinggi': 'green', 'Potensi Menengah': 'blue', 'Potensi Rendah': 'red'},
-            title="Sebaran Kecamatan Berdasarkan Kemiripan Karakteristik"
+            color_discrete_map={'Potensi Tinggi': '#2ecc71', 'Potensi Menengah': '#3498db', 'Potensi Rendah': '#e74c3c'}
         )
-        fig_pca.update_traces(textposition='top center')
-        st.plotly_chart(fig_pca, use_container_width=True)
-        st.caption("Keterangan: Semakin dekat posisi dua kecamatan, semakin mirip potensi ekonominya.")
+        fig.update_traces(textposition='top center')
+        st.plotly_chart(fig, use_container_width=True)
 
     with tab2:
-        st.write("### Rata-rata Indikator Per Kategori")
-        df_profile = df_raw.drop(columns='Kecamatan').groupby('Kategori').mean().reset_index()
+        st.write("### Perbandingan Rata-rata Fitur per Kategori")
+        selected_feature = st.selectbox("Pilih Indikator:", fitur_ekonomi)
         
-        # Pilih fitur untuk ditampilkan di bar chart
-        feature_to_plot = st.selectbox("Pilih Indikator untuk Dibandingkan:", X.columns)
+        # Groupby dengan numeric_only=True
+        df_bar = df_raw.groupby('Kategori')[fitur_ekonomi].mean().reset_index()
         
         fig_bar = px.bar(
-            df_profile, x='Kategori', y=feature_to_plot,
-            color='Kategori',
-            title=f"Perbandingan Rata-rata {feature_to_plot}",
-            color_discrete_map={'Potensi Tinggi': 'green', 'Potensi Menengah': 'blue', 'Potensi Rendah': 'red'}
+            df_bar, x='Kategori', y=selected_feature, color='Kategori',
+            color_discrete_map={'Potensi Tinggi': '#2ecc71', 'Potensi Menengah': '#3498db', 'Potensi Rendah': '#e74c3c'}
         )
         st.plotly_chart(fig_bar, use_container_width=True)
 
-# --- HALAMAN 3: SIMULASI PREDIKSI ---
-elif menu == "💡 Simulasi Prediksi":
-    st.title("💡 Simulasi Penentuan Klaster")
-    st.write("Masukkan data indikator ekonomi untuk memprediksi kategori potensi wilayah tersebut.")
-    
-    with st.form("input_form"):
-        col1, col2 = st.columns(2)
+# --- 7. HALAMAN 3: SIMULASI ---
+elif menu == "💡 Simulasi":
+    st.title("💡 Simulasi Klasifikasi Wilayah")
+    st.write("Masukkan data baru untuk mengetahui potensi ekonominya.")
+
+    with st.form("form_simulasi"):
+        cols = st.columns(2)
+        inputs = {}
+        for i, feat in enumerate(fitur_ekonomi):
+            with cols[i % 2]:
+                inputs[feat] = st.number_input(f"Masukkan {feat}", value=float(df_raw[feat].mean()))
         
-        with col1:
-            jml_penduduk = st.number_input("Jumlah Penduduk", value=100000)
-            kepadatan = st.number_input("Kepadatan Penduduk", value=5000)
-            pendidikan = st.number_input("Jumlah Sarana Pendidikan", value=20)
-            kesehatan = st.number_input("Jumlah Sarana Kesehatan", value=15)
-            transp = st.number_input("Jumlah Transportasi", value=10)
-            
-        with col2:
-            dagang = st.number_input("Sarana Perdagangan & Jasa", value=15)
-            pasar = st.number_input("Keberadaan Pasar/Toko", value=5)
-            bank = st.number_input("Jumlah Bank & Koperasi", value=5)
-            ikm = st.number_input("Jumlah IKM & Sentra", value=5)
-            
-        submitted = st.form_submit_button("Prediksi Kategori")
+        btn = st.form_submit_button("Cek Potensi")
+
+    if btn:
+        input_df = pd.DataFrame([inputs])
+        input_scaled = scaler.transform(input_df)
+        res_idx = kmeans.predict(input_scaled)[0]
+        res_label = mapping[res_idx]
         
-    if submitted:
-        # Satukan input menjadi array
-        new_data = np.array([[jml_penduduk, kepadatan, pendidikan, kesehatan, 
-                              transp, dagang, pasar, bank, ikm]])
-        
-        # Scaling & Predict
-        new_data_scaled = scaler.transform(new_data)
-        prediction = kmeans.predict(new_data_scaled)[0]
-        hasil_kategori = mapping[prediction]
-        
-        st.divider()
-        if "Tinggi" in hasil_kategori:
-            st.success(f"### Hasil: **{hasil_kategori}**")
-        elif "Menengah" in hasil_kategori:
-            st.info(f"### Hasil: **{hasil_kategori}**")
-        else:
-            st.warning(f"### Hasil: **{hasil_kategori}**")
+        st.success(f"### Wilayah ini termasuk dalam: **{res_label}**")
