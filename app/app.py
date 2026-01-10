@@ -45,7 +45,7 @@ st.sidebar.title("Navigasi")
 menu = st.sidebar.radio("Pilih Halaman:", ["🏠 Beranda & Dataset", "📊 Analisis Klasterisasi"])
 
 st.sidebar.divider()
-st.sidebar.caption("Project Magang BPS Kota Palemban")
+st.sidebar.caption("Project Magang BPS Kota Palembang")
 
 # --- 5. HALAMAN 1: BERANDA & DATASET ---
 if menu == "🏠 Beranda & Dataset":
