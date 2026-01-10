@@ -24,7 +24,17 @@ except Exception as e:
     st.stop()
 
 # --- PREPROCESSING UNTUK DASHBOARD ---
-X = df_raw.drop(columns=['Kecamatan'])
+# Daftar kolom yang digunakan saat training (pastikan urutan dan nama persis sama)
+fitur_ekonomi = [
+    'Jumlah Penduduk', 'Kepadatan Penduduk', 'Sarana Pendidikan', 
+    'Sarana Kesehatan', 'Transportasi', 'Sarana Perdagangan dan Jasa', 
+    'Keberadaan Pasar dan Pertokoan', 'Bank dan Koperasi', 'IKM dan Sentra'
+]
+
+# Pastikan hanya mengambil kolom-kolom di atas
+X = df_raw[fitur_ekonomi] 
+
+# Sekarang jalankan transform
 X_scaled = scaler.transform(X)
 df_raw['Cluster'] = kmeans.predict(X_scaled)
 
