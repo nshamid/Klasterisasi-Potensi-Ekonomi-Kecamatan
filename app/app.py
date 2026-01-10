@@ -174,7 +174,7 @@ elif menu == "👥 Profil Kelompok":
     st.markdown("---")
 
     st.image("Images/banner_kelompok.jpg", 
-             caption="Foto Bersama Kepala BPS Kota Palembang", use_container_width=True)
+             caption="Dokumentasi Bersama Bapak Edi Subeno, S.E., M.Si, Kepala BPS Kota Palembang", use_container_width=True)
     
     st.divider()
     
