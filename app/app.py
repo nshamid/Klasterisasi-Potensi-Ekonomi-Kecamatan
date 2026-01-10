@@ -68,7 +68,7 @@ if menu == "🏠 Beranda & Dataset":
         """)
     
     with col_b:
-        st.subheader("🔢 Statistik Data")
+        st.subheader("📈 Statistik Data")
         st.metric("Total Wilayah", f"{len(df_raw)} Kecamatan")
         st.metric("Jumlah Indikator", f"{len(fitur_ekonomi)} Kolom")
         st.metric("Jumlah Klaster (K)", "3 Kategori")
