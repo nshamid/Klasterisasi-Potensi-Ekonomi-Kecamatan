@@ -203,7 +203,7 @@ elif menu == "👥 Profil Kelompok":
     
     st.divider()
     
-    col_info, col_logo = st.columns([3, 1])
+    col_logo, col_info = st.columns([3, 1])
 
     with col_logo:
         # Menampilkan Logo UNSRI
