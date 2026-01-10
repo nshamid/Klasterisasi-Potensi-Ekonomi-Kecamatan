@@ -13,8 +13,8 @@ st.set_page_config(page_title="Dashboard Ekonomi Palembang", layout="wide")
 @st.cache_resource
 def load_essentials():
     df = pd.read_csv("Dataset Potensi Ekonomi Kecamatan di Kota Palembang 2025.csv")
-    model = joblib.load('model_kmeans_palembang.pkl')
-    scaler = joblib.load('scaler_palembang.pkl')
+    model = joblib.load('model_kmeans_potensiekonomi.pkl')
+    scaler = joblib.load('scaler_potensiekonomi.pkl')
     return df, model, scaler
 
 try:
