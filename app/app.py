@@ -40,7 +40,7 @@ mapping = {ranking[0]: 'Potensi Rendah', ranking[1]: 'Potensi Menengah', ranking
 df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
 
 # --- 4. SIDEBAR ---
-st.sidebar.image("logo_bps.png", width=80)
+st.sidebar.image("Images/logo_bps.png", width=80)
 st.sidebar.title("Navigasi")
 menu = st.sidebar.radio("Pilih Halaman:", ["🏠 Beranda & Dataset", "📊 Analisis Klasterisasi", "👥 Profil Kelompok"])
 
@@ -172,11 +172,9 @@ elif menu == "📊 Analisis Klasterisasi":
 elif menu == "👥 Profil Kelompok":
     st.title("👥 Profil Kelompok Kerja Praktik")
     st.markdown("---")
-    
-    # Menampilkan Banner (Pastikan file ada di folder data/ atau gunakan URL)
-    # Jika menggunakan file lokal: st.image("data/banner_kelompok.jpg", use_column_width=True)
-    st.image("https://via.placeholder.com/1200x400.png?text=Kerja+Praktik+BPS+Kota+Palembang+2025", 
-             caption="Dokumentasi Kerja Praktik Mahasiswi Teknik Informatika UNSRI", use_container_width=True)
+
+    st.image("Images/banner_kelompok.jpg", 
+             caption="Foto Bersama Kepala BPS Kota Palembang", use_container_width=True)
     
     st.divider()
     
@@ -202,7 +200,7 @@ elif menu == "👥 Profil Kelompok":
     
     with col_logo:
         # Menampilkan Logo UNSRI
-        st.image("https://upload.wikimedia.org/wikipedia/id/thumb/a/a1/Logo_Universitas_Sriwijaya.png/480px-Logo_Universitas_Sriwijaya.png", width=200)
+        st.image("logo_unsri.png", width=200)
 
     st.divider()
     st.success("Terima Kasih kepada BPS Kota Palembang atas bimbingan dan kesempatan yang diberikan.")
