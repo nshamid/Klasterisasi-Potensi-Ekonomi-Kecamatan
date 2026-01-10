@@ -204,6 +204,10 @@ elif menu == "👥 Profil Kelompok":
     st.divider()
     
     col_info, col_logo = st.columns([3, 1])
+
+    with col_logo:
+        # Menampilkan Logo UNSRI
+        st.image("Images/logo_unsri.png", width=200)
     
     with col_info:
         st.header("Teknik Informatika Bilingual 2023")
@@ -222,10 +226,6 @@ elif menu == "👥 Profil Kelompok":
         2. **Saravina Zharfa Kelana P** (09021382328149)
         3. **Azka Hukma Tsabita** (09021382328163)
         """)
-    
-    with col_logo:
-        # Menampilkan Logo UNSRI
-        st.image("Images/logo_unsri.png", width=200)
 
     st.divider()
     st.success("Terima Kasih kepada BPS Kota Palembang atas bimbingan dan kesempatan yang diberikan.")
