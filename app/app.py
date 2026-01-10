@@ -13,7 +13,7 @@ st.markdown("""
     <style>
     /* Mengubah warna latar belakang utama */
     .stApp {
-        background-color: #FFFFFF;
+        background-color: #FFEADE;
     }
     /* Mengubah semua teks menjadi hitam */
     h1, h2, h3, h4, h5, h6, p, li, div, span {
