@@ -88,7 +88,7 @@ if menu == "🏠 Beranda & Dataset":
         """)
         st.info("""
         **Sumber Data Resmi:**
-        - BPS Kota Palembang: *Kecamatan Dalam Angka 2025*
+        - BPS Kota Palembang: *Kota Palembang Dalam Angka 2025*
         - BPS Kota Palembang: *Statistik Potensi Desa (Podes) Kota Palembang 2025*
         """)
     
