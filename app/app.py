@@ -40,12 +40,12 @@ mapping = {ranking[0]: 'Potensi Rendah', ranking[1]: 'Potensi Menengah', ranking
 df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
 
 # --- 4. SIDEBAR ---
-st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/b/b3/Logo_BPS.png", width=80)
+st.sidebar.image("logo_BPS.png", width=80)
 st.sidebar.title("Navigasi")
 menu = st.sidebar.radio("Pilih Halaman:", ["🏠 Beranda & Dataset", "📊 Analisis Klasterisasi"])
 
 st.sidebar.divider()
-st.sidebar.caption("Project Magang BPS Kota Palembang 2025")
+st.sidebar.caption("Project Magang BPS Kota Palemban")
 
 # --- 5. HALAMAN 1: BERANDA & DATASET ---
 if menu == "🏠 Beranda & Dataset":
