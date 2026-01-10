@@ -77,9 +77,6 @@ if menu == "🏠 Beranda & Dataset":
     # Eksplorasi Data
     st.write("### Preview Dataset Utama")
     st.dataframe(df_raw[['Kecamatan'] + fitur_ekonomi], use_container_width=True)
-    
-    st.write("### Statistik Deskriptif")
-    st.table(df_raw[fitur_ekonomi].describe().T)
 
 # --- 6. HALAMAN 2: ANALISIS KLASTERISASI ---
 elif menu == "📊 Analisis Klasterisasi":
