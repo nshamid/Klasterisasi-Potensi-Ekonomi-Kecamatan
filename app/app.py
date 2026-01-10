@@ -42,7 +42,7 @@ df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
 # --- 4. SIDEBAR ---
 st.sidebar.image("logo_bps.png", width=80)
 st.sidebar.title("Navigasi")
-menu = st.sidebar.radio("Pilih Halaman:", ["🏠 Beranda & Dataset", "📊 Analisis Klasterisasi"])
+menu = st.sidebar.radio("Pilih Halaman:", ["🏠 Beranda & Dataset", "📊 Analisis Klasterisasi", "👥 Profil Kelompok"])
 
 st.sidebar.divider()
 st.sidebar.caption("Project Magang BPS Kota Palembang")
@@ -167,3 +167,42 @@ elif menu == "📊 Analisis Klasterisasi":
         color_discrete_map={'Potensi Tinggi': '#27ae60', 'Potensi Menengah': '#2980b9', 'Potensi Rendah': '#c0392b'}
     )
     st.plotly_chart(fig_bar, use_container_width=True)
+
+# --- 7. HALAMAN 3: PROFIL KELOMPOK (CREDIT) ---
+elif menu == "👥 Profil Kelompok":
+    st.title("👥 Profil Kelompok Kerja Praktik")
+    st.markdown("---")
+    
+    # Menampilkan Banner (Pastikan file ada di folder data/ atau gunakan URL)
+    # Jika menggunakan file lokal: st.image("data/banner_kelompok.jpg", use_column_width=True)
+    st.image("https://via.placeholder.com/1200x400.png?text=Kerja+Praktik+BPS+Kota+Palembang+2025", 
+             caption="Dokumentasi Kerja Praktik Mahasiswi Teknik Informatika UNSRI", use_container_width=True)
+    
+    st.divider()
+    
+    col_info, col_logo = st.columns([3, 1])
+    
+    with col_info:
+        st.header("Teknik Informatika Bilingual 2023")
+        st.subheader("Fakultas Ilmu Komputer, Universitas Sriwijaya")
+        
+        st.write("### Informasi Akademik")
+        st.markdown("""
+        - **Mata Kuliah:** Kerja Praktik (FTI4001)
+        - **Dosen Pengampu:** Yunita, S.Si., M.Cs.
+        - **Dosen Pembimbing Lapangan:** Aharmisa Rahmatullah, S.ST
+        """)
+        
+        st.write("### Anggota Kelompok")
+        st.markdown("""
+        1. **Nabilah Shamid** (09021382328147)
+        2. **Saravina Zharfa Kelana P** (09021382328149)
+        3. **Azka Hukma Tsabita** (09021382328163)
+        """)
+    
+    with col_logo:
+        # Menampilkan Logo UNSRI
+        st.image("https://upload.wikimedia.org/wikipedia/id/thumb/a/a1/Logo_Universitas_Sriwijaya.png/480px-Logo_Universitas_Sriwijaya.png", width=200)
+
+    st.divider()
+    st.success("Terima Kasih kepada BPS Kota Palembang atas bimbingan dan kesempatan yang diberikan.")
