@@ -200,7 +200,7 @@ elif menu == "👥 Profil Kelompok":
     
     with col_logo:
         # Menampilkan Logo UNSRI
-        st.image("logo_unsri.png", width=200)
+        st.image("Images/logo_unsri.png", width=200)
 
     st.divider()
     st.success("Terima Kasih kepada BPS Kota Palembang atas bimbingan dan kesempatan yang diberikan.")
