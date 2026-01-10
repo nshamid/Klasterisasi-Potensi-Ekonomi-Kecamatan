@@ -52,30 +52,50 @@ if menu == "🏠 Beranda & Dataset":
     st.title("🏙️ Potensi Ekonomi Kecamatan Kota Palembang 2025")
     st.markdown("---")
     
-    # Sumber Data & Info
+    # Bagian 1: Informasi Project & Sumber Data
     col_a, col_b = st.columns([2, 1])
     with col_a:
-        st.subheader("Informasi Project")
+        st.subheader("📌 Informasi Project")
         st.write("""
         Project ini bertujuan untuk memetakan kekuatan ekonomi wilayah di Kota Palembang menggunakan 
-        pendekatan Machine Learning (K-Means Clustering). Hasil dari analisis ini diharapkan dapat 
-        menjadi bahan pertimbangan dalam pemerataan pembangunan ekonomi wilayah.
+        pendekatan Machine Learning (**K-Means Clustering**). Analisis ini mengelompokkan kecamatan 
+        ke dalam tingkatan potensi ekonomi untuk membantu perencanaan pembangunan daerah.
         """)
         st.info("""
-        **Sumber Data:**
-        - Publikasi BPS: *Kota Palembang Dalam Angka 2025*
-        - Publikasi BPS: *Statistik Potensi Desa Kota Palembang 2025*
+        **Sumber Data Resmi:**
+        - BPS Kota Palembang: *Kecamatan Dalam Angka 2025*
+        - BPS Kota Palembang: *Statistik Potensi Desa (Podes) Kota Palembang 2025*
         """)
     
     with col_b:
-        st.subheader("Statistik Ringkas")
+        st.subheader("🔢 Statistik Data")
         st.metric("Total Wilayah", f"{len(df_raw)} Kecamatan")
-        st.metric("Indikator Digunakan", f"{len(fitur_ekonomi)} Kolom")
+        st.metric("Jumlah Indikator", f"{len(fitur_ekonomi)} Kolom")
+        st.metric("Jumlah Klaster (K)", "3 Kategori")
+
+    st.divider()
+
+    # Bagian 2: Fitur (Atribut) Dataset 
+    st.subheader("📋 Fitur (Atribut) Dataset")
+    st.markdown("""
+    | Fitur | Keterangan |
+    | :--- | :--- |
+    | **Kecamatan** | Nama kecamatan di Kota Palembang yang menjadi unit analisis |
+    | **Jumlah Penduduk** | Jumlah penduduk yang berdomisili di masing-masing kecamatan |
+    | **Kepadatan Penduduk** | Kepadatan penduduk per km² di setiap kecamatan |
+    | **Sarana Pendidikan** | Jumlah seluruh fasilitas pendidikan (TK, SD, SMP, SMA/SMK, Perguruan Tinggi) |
+    | **Sarana Kesehatan** | Jumlah seluruh fasilitas kesehatan (RS, Puskesmas, Klinik, Apotek, dll) |
+    | **Sarana Perdagangan & Jasa** | Jumlah fasilitas perdagangan modern (Minimarket, Restoran, Hotel, dll) |
+    | **Pasar dan Pertokoan** | Jumlah pasar tradisional dan kelompok pertokoan yang tersedia |
+    | **Transportasi** | Jumlah desa/kelurahan yang memiliki akses angkutan umum dan online |
+    | **Bank dan Koperasi** | Jumlah lembaga keuangan berupa bank dan koperasi |
+    | **IMK dan Sentra** | Jumlah industri mikro dan kecil serta sentra industri |
+    """)
 
     st.divider()
     
-    # Eksplorasi Data
-    st.write("### Preview Dataset Utama")
+    # Bagian 3: Preview Dataset
+    st.write("### 📄 Dataset Utama")
     st.dataframe(df_raw[['Kecamatan'] + fitur_ekonomi], use_container_width=True)
 
 # --- 6. HALAMAN 2: ANALISIS KLASTERISASI ---
