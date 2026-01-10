@@ -49,7 +49,7 @@ st.sidebar.caption("Project Magang BPS Kota Palembang 2025")
 
 # --- 5. HALAMAN 1: BERANDA & DATASET ---
 if menu == "🏠 Beranda & Dataset":
-    st.title("🏙️ Potensi Ekonomi Kecamatan Kota Palembang 2025")
+    st.title("🏙️ Potensi Ekonomi Kecamatan di Kota Palembang 2025")
     st.markdown("---")
     
     # Bagian 1: Informasi Project & Sumber Data
