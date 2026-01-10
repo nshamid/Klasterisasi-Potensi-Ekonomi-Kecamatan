@@ -8,6 +8,31 @@ from sklearn.decomposition import PCA
 # --- 1. KONFIGURASI HALAMAN ---
 st.set_page_config(page_title="Dashboard Ekonomi Palembang 2025", layout="wide")
 
+# CSS untuk Memaksa Light Mode, Background Putih, dan Font Hitam
+st.markdown("""
+    <style>
+    /* Mengubah warna latar belakang utama */
+    .stApp {
+        background-color: #FFFFFF;
+    }
+    /* Mengubah semua teks menjadi hitam */
+    h1, h2, h3, h4, h5, h6, p, li, div, span {
+        color: #000000 !important;
+    }
+    /* Mengubah warna teks di Sidebar */
+    [data-testid="stSidebar"] {
+        background-color: #F8F9FA;
+    }
+    [data-testid="stSidebar"] * {
+        color: #000000 !important;
+    }
+    /* Mengubah warna border tabel agar terlihat jelas */
+    .stDataFrame {
+        border: 1px solid #000000;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Daftar kolom fitur asli (Sesuai model saat training)
 fitur_ekonomi = [
     'Jumlah Penduduk', 'Kepadatan Penduduk', 'Sarana Pendidikan', 
