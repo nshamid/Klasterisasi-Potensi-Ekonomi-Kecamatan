@@ -209,33 +209,41 @@ elif menu == "👥 Profil Kelompok":
     st.title("👥 Profil Kelompok Kerja Praktik")
     st.markdown("---")
 
+    # 1. Banner Dokumentasi
     st.image("Images/banner_kelompok.jpg", 
-             caption="Dokumentasi Bersama Bapak Edi Subeno, S.E., M.Si. Kepala BPS Kota Palembang", use_container_width=True)
+             caption="Dokumentasi Bersama Bapak Edi Subeno, S.E., M.Si. Kepala BPS Kota Palembang", 
+             use_container_width=True)
     
     st.divider()
-    
-    col_logo, col_info = st.columns([3, 1])
 
-    with col_logo:
-        # Menampilkan Logo UNSRI
+    # 2. Logo UNSRI
+    col_l1, col_l2, col_l3 = st.columns([1, 1, 1])
+    with col_l2:
         st.image("Images/logo_unsri.png", width=200)
     
+    # 3. Informasi Universitas (Teks Tengah)
+    st.markdown("<h2 style='text-align: center;'>Teknik Informatika Bilingual 2023</h2>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>Fakultas Ilmu Komputer, Universitas Sriwijaya</h3>", unsafe_allow_html=True)
+    
+    st.divider()
+
+    # 4. Informasi Akademik & Anggota
+    col_info, col_anggota = st.columns(2)
+
     with col_info:
-        st.header("Teknik Informatika Bilingual 2023")
-        st.subheader("Fakultas Ilmu Komputer, Universitas Sriwijaya")
-        
-        st.write("### Informasi Akademik")
+        st.write("### 📖 Informasi Akademik")
         st.markdown("""
         - **Mata Kuliah:** Kerja Praktik (FTI4001)
         - **Dosen Pengampu:** Yunita, S.Si., M.Cs.
         - **Dosen Pembimbing Lapangan:** Aharmisa Rahmatullah, S.ST
         """)
         
-        st.write("### Anggota Kelompok")
+    with col_anggota:
+        st.write("### 👩‍🎓 Anggota Kelompok")
         st.markdown("""
         1. **Nabilah Shamid** (09021382328147)
         2. **Saravina Zharfa Kelana P** (09021382328149)
-        3. **Azka Hukma Tsabita** (09021382328163)
+        3. **Raka Athallah Ananta** (09021382328163)
         """)
 
     st.divider()
