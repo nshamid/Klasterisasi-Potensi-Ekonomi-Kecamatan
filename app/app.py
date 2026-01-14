@@ -59,13 +59,27 @@ X = df_raw[fitur_ekonomi]
 X_scaled = scaler.transform(X)
 df_raw['Cluster'] = kmeans.predict(X_scaled)
 
-# PERBAIKAN LOGIKA MAPPING:
-# ranking[0] = Skor terendah (8 Kecamatan) -> Potensi Rendah
-# ranking[1] = Skor menengah (6 Kecamatan) -> Potensi Menengah
-# ranking[2] = Skor tertinggi (4 Kecamatan) -> Potensi Tinggi
-ranking = df_raw.groupby('Cluster')[fitur_ekonomi].mean(numeric_only=True).sum(axis=1).sort_values().index
-mapping = {ranking[0]: 'Potensi Rendah', ranking[1]: 'Potensi Menengah', ranking[2]: 'Potensi Tinggi'}
+# ================= PERBAIKAN UTAMA =================
+cluster_score = (
+    df_raw
+    .groupby('Cluster')[fitur_ekonomi]
+    .mean(numeric_only=True)
+    .sum(axis=1)
+)
+
+# Urutkan klaster berdasarkan skor (rendah → tinggi)
+sorted_cluster = cluster_score.sort_values()
+
+mapping = {
+    sorted_cluster.index[0]: 'Potensi Rendah',
+    sorted_cluster.index[1]: 'Potensi Menengah',
+    sorted_cluster.index[2]: 'Potensi Tinggi'
+}
+
 df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
+
+st.write("Distribusi Kategori:")
+st.write(df_raw['Kategori'].value_counts())
 
 # --- 4. SIDEBAR ---
 st.sidebar.image("Images/logo_bps.png", width=80)
