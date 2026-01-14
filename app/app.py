@@ -54,29 +54,24 @@ except Exception as e:
     st.error(f"Gagal memuat file. Error: {e}")
     st.stop()
 
-# --- 3. PROSES KLASTERING (BAGIAN PERBAIKAN) ---
+# --- 3. PROSES KLASTERING ---
 X = df_raw[fitur_ekonomi]
 X_scaled = scaler.transform(X)
 df_raw['Cluster'] = kmeans.predict(X_scaled)
 
-# Menentukan urutan cluster berdasarkan skor rata-rata (Terendah ke Tertinggi)
+# Penentuan Label Otomatis Berdasarkan Skor Rata-rata (Terendah ke Tertinggi)
 ranking = df_raw.groupby('Cluster')[fitur_ekonomi].mean(numeric_only=True).sum(axis=1).sort_values().index
 
-# Mapping diperbaiki agar: 
-# ranking[0] (skor terendah) -> Potensi Rendah (8 Kec)
-# ranking[1] (skor menengah) -> Potensi Menengah (6 Kec)
-# ranking[2] (skor tertinggi) -> Potensi Tinggi (4 Kec)
+# PERBAIKAN LOGIKA DISINI:
+# ranking[0] adalah skor terendah -> Potensi Rendah (8 Kecamatan)
+# ranking[1] adalah skor menengah -> Potensi Menengah (6 Kecamatan)
+# ranking[2] adalah skor tertinggi -> Potensi Tinggi (4 Kecamatan)
 mapping = {
     ranking[0]: 'Potensi Rendah', 
     ranking[1]: 'Potensi Menengah', 
     ranking[2]: 'Potensi Tinggi'
 }
 df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
-
-# Memastikan urutan kategori tetap konsisten untuk visualisasi
-df_raw['Kategori'] = pd.Categorical(df_raw['Kategori'], 
-                                    categories=['Potensi Tinggi', 'Potensi Menengah', 'Potensi Rendah'], 
-                                    ordered=True)
 
 # --- 4. SIDEBAR ---
 st.sidebar.image("Images/logo_bps.png", width=80)
