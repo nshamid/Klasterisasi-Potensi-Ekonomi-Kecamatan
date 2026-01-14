@@ -69,8 +69,15 @@ cluster_score = (
     .sum(axis=1)
 )
 
-# Urutkan klaster berdasarkan skor (rendah → tinggi)
 sorted_cluster = cluster_score.sort_values()
+
+# 🔒 Proteksi jika klaster tidak lengkap
+if len(sorted_cluster) != 3:
+    st.error(
+        f"Jumlah klaster terdeteksi = {len(sorted_cluster)} (harusnya 3). "
+        "Periksa preprocessing data."
+    )
+    st.stop()
 
 mapping = {
     sorted_cluster.index[0]: 'Potensi Rendah',
@@ -79,6 +86,7 @@ mapping = {
 }
 
 df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
+
 
 st.write("Distribusi Kategori:")
 st.write(df_raw['Kategori'].value_counts())
