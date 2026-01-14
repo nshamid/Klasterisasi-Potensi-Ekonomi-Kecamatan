@@ -153,7 +153,7 @@ elif menu == "📊 Analisis Klasterisasi":
         fig_pca = px.scatter(
             df_pca, x='PC1', y='PC2', color='Kategori',
             hover_name='Kecamatan', text='Kecamatan',
-            color_discrete_map={'Potensi Tinggi': '#27ae60', 'Potensi Menengah': '#2980b9', 'Potensi Rendah': '#c0392b'},
+            color_discrete_map={'Potensi Tinggi': '#27ae60', 'Potensi Rendah': '#2980b9', 'Potensi Menengah': '#c0392b'},
             template="plotly_white"
         )
         fig_pca.update_traces(textposition='top center', marker=dict(size=12, line=dict(width=1, color='DarkSlateGrey')))
@@ -176,7 +176,7 @@ elif menu == "📊 Analisis Klasterisasi":
     
     # Menampilkan daftar kecamatan dalam kolom agar rapi
     cat_cols = st.columns(3)
-    kategori_list = ['Potensi Tinggi', 'Potensi Menengah', 'Potensi Rendah']
+    kategori_list = ['Potensi Tinggi', 'Potensi Rendah', 'Potensi Menengah']
     warna_list = ['green', 'blue', 'red']
 
     for i, kat in enumerate(kategori_list):
