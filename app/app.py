@@ -62,7 +62,7 @@ except Exception as e:
 # Dashboard Streamlit hanya melakukan visualisasi
 
 df_raw = pd.read_csv(
-    "DDataset/Dataset Potensi Ekonomi Kecamatan di Kota Palembang 2025.csv"
+    "Dataset/Dataset Potensi Ekonomi Kecamatan di Kota Palembang 2025.csv"
 )
 
 # Samakan nama kolom kategori agar konsisten
