@@ -50,6 +50,8 @@ def load_essentials():
 
 try:
     df_raw, kmeans, scaler = load_essentials()
+    df_raw['Jumlah Penduduk'] = (df_raw['Jumlah Penduduk'] * 1000).astype(int)
+    df_raw['Kepadatan Penduduk'] = (df_raw['Kepadatan Penduduk'] * 1000).astype(int)
 except Exception as e:
     st.error(f"Gagal memuat file. Error: {e}")
     st.stop()
