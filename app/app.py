@@ -61,8 +61,12 @@ df_raw['Cluster'] = kmeans.predict(X_scaled)
 
 # Penentuan Label Otomatis (Rendah -> Tinggi)
 ranking = df_raw.groupby('Cluster')[fitur_ekonomi].mean(numeric_only=True).sum(axis=1).sort_values().index
-mapping = {ranking[0]: 'Potensi Menengah', ranking[1]: 'Potensi Rendah', ranking[2]: 'Potensi Tinggi'}
-df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
+mapping = {
+    ranking[0]: 'Potensi Rendah', 
+    ranking[1]: 'Potensi Menengah', 
+    ranking[2]: 'Potensi Tinggi'
+}
+df_raw['Kategori'] = df_raw['Cluster'].map(mapping))
 
 # --- 4. SIDEBAR ---
 st.sidebar.image("Images/logo_bps.png", width=80)
