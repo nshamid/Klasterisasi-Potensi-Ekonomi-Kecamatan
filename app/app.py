@@ -75,7 +75,7 @@ sorted_cluster = cluster_score.sort_values()
 mapping = {
     sorted_cluster.index[0]: 'Potensi Rendah',
     sorted_cluster.index[1]: 'Potensi Menengah',
-    sorted_cluster.index[2]: 'Potensi Tinggi'
+    sorted_cluster.index[2]: 'Potensi Tinggi',
 }
 
 df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
