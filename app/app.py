@@ -54,33 +54,18 @@ except Exception as e:
     st.error(f"Gagal memuat file. Error: {e}")
     st.stop()
 
-# --- 3. PROSES KLASTERING (PERBAIKAN LOGIKA MAPPING) ---
+# --- 3. PROSES KLASTERING ---
 X = df_raw[fitur_ekonomi]
 X_scaled = scaler.transform(X)
 df_raw['Cluster'] = kmeans.predict(X_scaled)
 
-# Penentuan Label Otomatis (Rendah -> Tinggi berdasarkan skor)
+# PERBAIKAN LOGIKA MAPPING:
+# ranking[0] = Skor terendah (8 Kecamatan) -> Potensi Rendah
+# ranking[1] = Skor menengah (6 Kecamatan) -> Potensi Menengah
+# ranking[2] = Skor tertinggi (4 Kecamatan) -> Potensi Tinggi
 ranking = df_raw.groupby('Cluster')[fitur_ekonomi].mean(numeric_only=True).sum(axis=1).sort_values().index
-
-# FIX: ranking[0] adalah skor terkecil (harus Rendah), ranking[1] adalah tengah (harus Menengah)
-mapping = {
-    ranking[0]: 'Potensi Rendah', 
-    ranking[1]: 'Potensi Menengah', 
-    ranking[2]: 'Potensi Tinggi'
-}
+mapping = {ranking[0]: 'Potensi Rendah', ranking[1]: 'Potensi Menengah', ranking[2]: 'Potensi Tinggi'}
 df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
-
-# Pastikan urutan kategori untuk grafik tetap rapi
-df_raw['Kategori'] = pd.Categorical(df_raw['Kategori'], 
-                                    categories=['Potensi Tinggi', 'Potensi Menengah', 'Potensi Rendah'], 
-                                    ordered=True)
-
-# Warna standar: Tinggi=Hijau, Menengah=Biru, Rendah=Merah
-color_palette = {
-    'Potensi Tinggi': '#27ae60', 
-    'Potensi Menengah': '#2980b9', 
-    'Potensi Rendah': '#c0392b'
-}
 
 # --- 4. SIDEBAR ---
 st.sidebar.image("Images/logo_bps.png", width=80)
@@ -168,10 +153,11 @@ elif menu == "📊 Analisis Klasterisasi":
         df_pca['Kecamatan'] = df_raw['Kecamatan']
         df_pca['Kategori'] = df_raw['Kategori']
 
+        # PERBAIKAN WARNA: Rendah=Merah (#c0392b), Menengah=Biru (#2980b9)
         fig_pca = px.scatter(
             df_pca, x='PC1', y='PC2', color='Kategori',
             hover_name='Kecamatan', text='Kecamatan',
-            color_discrete_map=color_palette,
+            color_discrete_map={'Potensi Tinggi': '#27ae60', 'Potensi Menengah': '#2980b9', 'Potensi Rendah': '#c0392b'},
             template="plotly_white"
         )
         fig_pca.update_traces(textposition='top center', marker=dict(size=12, line=dict(width=1, color='DarkSlateGrey')))
@@ -180,10 +166,11 @@ elif menu == "📊 Analisis Klasterisasi":
     with col2:
         st.write("#### 🥧 Proporsi Kategori")
         count_data = df_raw['Kategori'].value_counts().reset_index()
+        # PERBAIKAN WARNA: Harus sama dengan PCA
         fig_pie = px.pie(
             count_data, names='Kategori', values='count',
             color='Kategori',
-            color_discrete_map=color_palette
+            color_discrete_map={'Potensi Tinggi': '#27ae60', 'Potensi Menengah': '#2980b9', 'Potensi Rendah': '#c0392b'}
         )
         st.plotly_chart(fig_pie, use_container_width=True)
 
@@ -192,7 +179,7 @@ elif menu == "📊 Analisis Klasterisasi":
     # Baris 2: Daftar Kecamatan & Profiling
     st.write("### 📋 Pembagian Wilayah per Kategori")
     
-    # Menampilkan daftar kecamatan dalam kolom agar rapi
+    # PERBAIKAN URUTAN LIST: Menengah harus di tengah agar warna Biru cocok
     cat_cols = st.columns(3)
     kategori_list = ['Potensi Tinggi', 'Potensi Menengah', 'Potensi Rendah']
     warna_list = ['green', 'blue', 'red']
@@ -218,7 +205,7 @@ elif menu == "📊 Analisis Klasterisasi":
         df_avg, x='Kategori', y=feature, color='Kategori',
         text_auto='.2f',
         title=f"Rata-rata {feature} per Kategori",
-        color_discrete_map=color_palette
+        color_discrete_map={'Potensi Tinggi': '#27ae60', 'Potensi Menengah': '#2980b9', 'Potensi Rendah': '#c0392b'}
     )
     st.plotly_chart(fig_bar, use_container_width=True)
 
