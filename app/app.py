@@ -54,22 +54,28 @@ except Exception as e:
     st.error(f"Gagal memuat file. Error: {e}")
     st.stop()
 
-# --- 3. PROSES KLASTERING ---
+# --- 3. PROSES KLASTERING (BAGIAN PERBAIKAN) ---
 X = df_raw[fitur_ekonomi]
 X_scaled = scaler.transform(X)
 df_raw['Cluster'] = kmeans.predict(X_scaled)
 
-# Penentuan Label Otomatis (Rendah -> Tinggi)
+# Menentukan urutan cluster berdasarkan skor rata-rata (Terendah ke Tertinggi)
 ranking = df_raw.groupby('Cluster')[fitur_ekonomi].mean(numeric_only=True).sum(axis=1).sort_values().index
+
+# Mapping diperbaiki agar: 
+# ranking[0] (skor terendah) -> Potensi Rendah (8 Kec)
+# ranking[1] (skor menengah) -> Potensi Menengah (6 Kec)
+# ranking[2] (skor tertinggi) -> Potensi Tinggi (4 Kec)
 mapping = {
     ranking[0]: 'Potensi Rendah', 
     ranking[1]: 'Potensi Menengah', 
     ranking[2]: 'Potensi Tinggi'
 }
-df_raw['Kategori'] = df_raw['Cluster'].map(mapping))
+df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
 
+# Memastikan urutan kategori tetap konsisten untuk visualisasi
 df_raw['Kategori'] = pd.Categorical(df_raw['Kategori'], 
-                                    categories=['Potensi Rendah', 'Potensi Menengah', 'Potensi Tinggi'], 
+                                    categories=['Potensi Tinggi', 'Potensi Menengah', 'Potensi Rendah'], 
                                     ordered=True)
 
 # --- 4. SIDEBAR ---
@@ -161,7 +167,7 @@ elif menu == "📊 Analisis Klasterisasi":
         fig_pca = px.scatter(
             df_pca, x='PC1', y='PC2', color='Kategori',
             hover_name='Kecamatan', text='Kecamatan',
-            color_discrete_map={'Potensi Tinggi': '#27ae60', 'Potensi Menengah': '#2980b9', 'Potensi Rendah': '#c0392b'},
+            color_discrete_map={'Potensi Tinggi': '#27ae60', 'Potensi Rendah': '#c0392b', 'Potensi Menengah': '#2980b9'},
             template="plotly_white"
         )
         fig_pca.update_traces(textposition='top center', marker=dict(size=12, line=dict(width=1, color='DarkSlateGrey')))
