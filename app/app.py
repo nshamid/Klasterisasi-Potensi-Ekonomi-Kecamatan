@@ -56,40 +56,18 @@ except Exception as e:
     st.error(f"Gagal memuat file. Error: {e}")
     st.stop()
 
-# --- 3. PROSES KLASTERING ---
-X = df_raw[fitur_ekonomi]
-X_scaled = scaler.transform(X)
-df_raw['Cluster'] = kmeans.predict(X_scaled)
+# --- 3. PROSES KLASTERING (FINAL - READ ONLY DARI COLAB) ---
 
-# ================= PERBAIKAN UTAMA =================
-cluster_score = (
-    df_raw
-    .groupby('Cluster')[fitur_ekonomi]
-    .mean(numeric_only=True)
-    .sum(axis=1)
+# Dataset sudah berisi hasil klasterisasi & kategori dari Google Colab
+# Dashboard Streamlit hanya melakukan visualisasi
+
+df_raw = pd.read_csv(
+    "DDataset/Dataset Potensi Ekonomi Kecamatan di Kota Palembang 2025.csv"
 )
 
-sorted_cluster = cluster_score.sort_values()
+# Samakan nama kolom kategori agar konsisten
+df_raw['Kategori'] = df_raw['Kategori_Potensi']
 
-# 🔒 Proteksi jika klaster tidak lengkap
-if len(sorted_cluster) != 3:
-    st.error(
-        f"Jumlah klaster terdeteksi = {len(sorted_cluster)} (harusnya 3). "
-        "Periksa preprocessing data."
-    )
-    st.stop()
-
-mapping = {
-    sorted_cluster.index[0]: 'Potensi Rendah',
-    sorted_cluster.index[1]: 'Potensi Menengah',
-    sorted_cluster.index[2]: 'Potensi Tinggi',
-}
-
-df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
-
-
-st.write("Distribusi Kategori:")
-st.write(df_raw['Kategori'].value_counts())
 
 # --- 4. SIDEBAR ---
 st.sidebar.image("Images/logo_bps.png", width=80)
