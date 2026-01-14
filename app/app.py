@@ -6,7 +6,7 @@ import joblib
 from sklearn.decomposition import PCA
 
 # --- 1. KONFIGURASI HALAMAN ---
-st.set_page_config(page_title="Dashboard Ekonomi Palembang 2025", layout="wide")
+st.set_page_config(page_title="Dashboard Sosial-Ekonomi Palembang 2025", layout="wide")
 
 # CSS
 st.markdown("""
@@ -74,7 +74,7 @@ st.sidebar.caption("Project Magang BPS Kota Palembang")
 
 # --- 5. HALAMAN 1: BERANDA & DATASET ---
 if menu == "🏠 Beranda & Dataset":
-    st.title("🏙️ Potensi Ekonomi Kecamatan di Kota Palembang 2025")
+    st.title("🏙️ Potensi Sosial-Ekonomi Kecamatan di Kota Palembang 2025")
     st.markdown("---")
     
     # Bagian 1: Informasi Project & Sumber Data
@@ -82,9 +82,9 @@ if menu == "🏠 Beranda & Dataset":
     with col_a:
         st.subheader("📌 Informasi Project")
         st.write("""
-        Project ini bertujuan untuk memetakan kekuatan ekonomi wilayah di Kota Palembang menggunakan 
+        Project ini bertujuan untuk memetakan kekuatan sosial-ekonomi wilayah di Kota Palembang menggunakan 
         pendekatan Machine Learning (**K-Means Clustering**). Analisis ini mengelompokkan kecamatan 
-        ke dalam tingkatan potensi ekonomi untuk membantu perencanaan pembangunan daerah.
+        ke dalam tingkatan potensi sosial-ekonomi untuk membantu perencanaan pembangunan daerah.
         """)
         st.info("""
         **Sumber Data Resmi:**
