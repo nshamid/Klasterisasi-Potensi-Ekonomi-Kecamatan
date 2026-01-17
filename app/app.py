@@ -61,7 +61,7 @@ df_raw['Cluster'] = kmeans.predict(X_scaled)
 
 # Mapping
 ranking = df_raw.groupby('Cluster')[fitur_ekonomi].mean(numeric_only=True).sum(axis=1).sort_values().index
-mapping = {ranking[0]: 'Potensi Rendah', ranking[1]: 'Potensi Menengah', ranking[2]: 'Potensi Tinggi'}
+mapping = {ranking[0]: 'Potensi Rendah', ranking[1]: 'Potensi Tinggi', ranking[2]: 'Potensi Menengah'}
 df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
 
 # --- 4. SIDEBAR ---
