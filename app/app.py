@@ -59,10 +59,7 @@ X = df_raw[fitur_ekonomi]
 X_scaled = scaler.transform(X)
 df_raw['Cluster'] = kmeans.predict(X_scaled)
 
-# PERBAIKAN LOGIKA MAPPING:
-# ranking[0] = Skor terendah (8 Kecamatan) -> Potensi Rendah
-# ranking[1] = Skor menengah (6 Kecamatan) -> Potensi Menengah
-# ranking[2] = Skor tertinggi (4 Kecamatan) -> Potensi Tinggi
+# Mapping
 ranking = df_raw.groupby('Cluster')[fitur_ekonomi].mean(numeric_only=True).sum(axis=1).sort_values().index
 mapping = {ranking[0]: 'Potensi Rendah', ranking[1]: 'Potensi Menengah', ranking[2]: 'Potensi Tinggi'}
 df_raw['Kategori'] = df_raw['Cluster'].map(mapping)
